@@ -78,4 +78,19 @@ public class DataJpaRepositoryTest {
         assertThat(user1Posts.size()).isEqualTo(2);
         assertThat(user1Posts.get(0).getUser().getName()).isEqualTo("김유신");
     }
+
+    @Test
+    void queryAnnotationTest() {
+        List<Post> posts = postRepository.findByKeywordInTitleOrContent("기본");
+        assertThat(posts.size()).isEqualTo(2);
+        assertThat(posts.get(0).getTitle()).contains("기본");
+
+        List<User> usersByName = userRepository.findByNameOrEmail("이순신");
+        assertThat(usersByName.size()).isEqualTo(1);
+        assertThat(usersByName.get(0).getName()).isEqualTo("이순신");
+
+        List<User> usersByEmail = userRepository.findByNameOrEmail("kim@email.com");
+        assertThat(usersByEmail.size()).isEqualTo(1);
+        assertThat(usersByEmail.get(0).getName()).isEqualTo("김유신");
+    }
 }

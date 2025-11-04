@@ -4,6 +4,7 @@ package com.jpa.practice.repository;
 import com.jpa.practice.entity.Post;
 import com.jpa.practice.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -16,4 +17,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     // 특정 사용자가 작성한 모든 게시글 찾기
     List<Post> findByUser(User user);
+
+    @Query("SELECT p FROM Post p WHERE p.title LIKE %?1% OR p.content LIKE %?1%")
+    List<Post> findByKeywordInTitleOrContent(String keyword);
 }
