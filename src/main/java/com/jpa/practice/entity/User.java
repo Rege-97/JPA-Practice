@@ -7,8 +7,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,34 +22,37 @@ import lombok.NoArgsConstructor;
 @Table(name = "users")  // 테이블 명
 public class User {
 
-  @Id   // 기본키
-  @GeneratedValue(strategy = GenerationType.IDENTITY)   // PK 설정
-  private Long id;
+    @Id   // 기본키
+    @GeneratedValue(strategy = GenerationType.IDENTITY)   // PK 설정
+    private Long id;
 
-  @Column(name = "username", nullable = false, length = 50) // 컬럼 설정
-  private String name;
+    @Column(name = "username", nullable = false, length = 50) // 컬럼 설정
+    private String name;
 
-  @Column(name = "email")
-  private String email;
+    @Column(name = "email")
+    private String email;
 
-  // 양방향 연관관계 추가
-  // 양방향 관계에서는 반드시 한쪽을 주인으로 정해야함(매핑ㅉㅉ)
-  // 이 필드는 순전히 조회용
-  @OneToMany(mappedBy = "user") // user 필드에 의해 매핑됨(Post 쪽의 user 필드)
-  private List<Post> posts = new ArrayList<>(); // 게시글 목록
+    // 양방향 연관관계 추가
+    // 양방향 관계에서는 반드시 한쪽을 주인으로 정해야함(매핑ㅉㅉ)
+    // 이 필드는 순전히 조회용
+    // 지연로딩(Lazy Loading)
+    // - 기본적으로 해당 엔티티가 조회될때는 posts 테이블을 JOIN 하지 않지만
+    // - getPosts()를 하면 게시글 목록에 접근하는 순간 posts 테이블을 조회하는 2번쨰 쿼리를 실행
+    @OneToMany(mappedBy = "user") // user 필드에 의해 매핑됨(Post 쪽의 user 필드)
+    private List<Post> posts = new ArrayList<>(); // 게시글 목록
 
-  @Builder  // 빌더로 생성
-  public User(String name, String email) {
-    this.name = name;
-    this.email = email;
-  }
+    @Builder  // 빌더로 생성
+    public User(String name, String email) {
+        this.name = name;
+        this.email = email;
+    }
 
-  // 수정 메서드(세터)
-  public void updateName(String newName) {
-    this.name = newName;
-  }
+    // 수정 메서드(세터)
+    public void updateName(String newName) {
+        this.name = newName;
+    }
 
-  public void updateEmail(String newEmail) {
-    this.email = newEmail;
-  }
+    public void updateEmail(String newEmail) {
+        this.email = newEmail;
+    }
 }
