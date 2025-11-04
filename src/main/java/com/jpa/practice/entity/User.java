@@ -5,7 +5,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,6 +29,12 @@ public class User {
 
   @Column(name = "email")
   private String email;
+
+  // 양방향 연관관계 추가
+  // 양방향 관계에서는 반드시 한쪽을 주인으로 정해야함(매핑ㅉㅉ)
+  // 이 필드는 순전히 조회용
+  @OneToMany(mappedBy = "user") // user 필드에 의해 매핑됨(Post 쪽의 user 필드)
+  private List<Post> posts = new ArrayList<>(); // 게시글 목록
 
   @Builder  // 빌더로 생성
   public User(String name, String email) {
